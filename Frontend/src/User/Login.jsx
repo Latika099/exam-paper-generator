@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+console.log("BASE_URL:", BASE_URL);
 import { BASE_URL } from "../config";
 // Importing multiple images for carousel
 import imgA from "../assets/img5.jpg";

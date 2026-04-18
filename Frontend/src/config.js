@@ -1,1 +1,1 @@
-export const BASE_URL = "https://exam-backend-tm1n.onrender.com";
+export const BASE_URL = "https://exam-paper-generator-41mm.onrender.com";

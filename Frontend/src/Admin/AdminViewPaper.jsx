@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 export default function AdminViewPaper() {
   const { id } = useParams(); // Get the Exam ID from the URL
@@ -8,7 +9,7 @@ export default function AdminViewPaper() {
 
   useEffect(() => {
     // Fetch the specific exam details
-    fetch(`http://localhost:5000/api/admin/exam/${id}`)
+    fetch(`${BASE_URL}/api/admin/exam/${id}`)
       .then((res) => res.json())
       .then((data) => setExam(data))
       .catch((err) => alert("Failed to load exam"));

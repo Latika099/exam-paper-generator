@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 export default function AdminReviewSubmission() {
   const { id } = useParams(); // submissionId
@@ -9,19 +10,18 @@ export default function AdminReviewSubmission() {
 
   
   useEffect(() => {
-  // Use a relative path to let Vite's proxy handle the port (5000 vs 5173)
-  fetch(`http://localhost:5000/api/admin/submission/${id}`)
+  fetch(`${BASE_URL}/api/admin/submission/${id}`)
     .then((res) => {
       if (!res.ok) throw new Error(`Server responded with ${res.status}`);
       return res.json();
     })
     .then((data) => setSubmission(data))
-    .catch((err) => console.error("Fetch error:", err));
+    .catch((err) => {});
 }, [id]);
 
   const handleSaveGrades = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/grade-submission/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/admin/grade-submission/${id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ marksData: manualMarks }),

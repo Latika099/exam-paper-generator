@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // This tells Vite: "If a request starts with /api, send it to port 5000"
+      // This tells Vite: "If a request starts with /api, send it to the Render backend"
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://exam-backend-tm1n.onrender.com',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },

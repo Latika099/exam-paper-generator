@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import imgA from "../assets/img2.jpg";
 import imgB from "../assets/img3.jpg";
 import imgC from "../assets/img4.jpg";
+import { BASE_URL } from "../config";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Register() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register-start", {
+      const res = await fetch(`${BASE_URL}/api/auth/register-start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username.trim(), email: email.trim(), password }),
@@ -51,8 +52,7 @@ export default function Register() {
         setError(data.message || "Registration failed");
       }
     } catch (err) {
-      console.error("Register Error:", err);
-      setError("Network error.");
+      setError("Network error. Please try again later.");
     } finally {
       setLoading(false);
     }

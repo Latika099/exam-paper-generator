@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 export default function AdminCheckPaper() {
   const { examId } = useParams();
@@ -11,12 +12,12 @@ export default function AdminCheckPaper() {
 
   // 1. Fetch data
   useEffect(() => {
-    fetch(`http://localhost:5000/api/admin/submissions/${examId}`)
+    fetch(`${BASE_URL}/api/admin/submissions/${examId}`)
       .then(res => res.json())
       .then(data => setSubmissions(data))
-      .catch(err => console.error(err));
+      .catch(err => {});
 
-    fetch(`http://localhost:5000/api/admin/exam/${examId}`)
+    fetch(`${BASE_URL}/api/admin/exam/${examId}`)
       .then(res => res.json())
       .then(data => setExamData(data));
   }, [examId]);
@@ -89,7 +90,7 @@ export default function AdminCheckPaper() {
   // 3. Publish Result
   const handlePublishResult = async () => {
     const finalScore = getTotalScore();
-    const res = await fetch("http://localhost:5000/api/admin/grade-paper", {
+    const res = await fetch(`${BASE_URL}/api/admin/grade-paper`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

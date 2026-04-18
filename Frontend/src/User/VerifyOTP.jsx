@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 export default function VerifyOTP() {
   const location = useLocation();
@@ -27,7 +28,7 @@ export default function VerifyOTP() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-email", {
+      const res = await fetch(`${BASE_URL}/api/auth/verify-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
@@ -44,8 +45,7 @@ export default function VerifyOTP() {
         setError(data.message || "Verification failed");
       }
     } catch (err) {
-      console.error("Verify Error:", err);
-      setError("Network error. Please check if the backend is running.");
+      setError("Network error. Please try again later.");
     } finally {
       setLoading(false);
     }

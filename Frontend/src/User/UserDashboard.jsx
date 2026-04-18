@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 export default function UserDashboard() {
     const navigate = useNavigate();
@@ -11,8 +12,8 @@ export default function UserDashboard() {
 
         // Safety check for ID
         const url = userId
-            ? `http://localhost:5000/api/user/exams?studentId=${userId}`
-            : `http://localhost:5000/api/user/exams`;
+            ? `${BASE_URL}/api/user/exams?studentId=${userId}`
+            : `${BASE_URL}/api/user/exams`;
 
         fetch(url)
             .then((res) => {
@@ -24,7 +25,6 @@ export default function UserDashboard() {
                 setLoading(false);
             })
             .catch((err) => {
-                console.error("Error loading exams:", err);
                 setLoading(false);
             });
     }, []);

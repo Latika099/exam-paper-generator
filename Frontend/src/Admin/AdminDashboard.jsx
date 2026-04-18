@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("add");
-  const API_BASE = "http://localhost:5000/api/admin";
+  const API_BASE = `${BASE_URL}/api/admin`;
 
   // --- STATES (Preserved) ---
   const [qData, setQData] = useState({
@@ -48,7 +49,7 @@ export default function AdminDashboard() {
         alert("Failed: " + (data.message || JSON.stringify(data)));
       }
     } catch (err) {
-      alert("Server Error: " + err.message);
+      alert("Server Error");
     }
   };
 
@@ -112,7 +113,7 @@ export default function AdminDashboard() {
       const res = await fetch(`${API_BASE}/get-exams`);
       const data = await res.json();
       setExams(data);
-    } catch (err) { console.error("Error fetching exams"); }
+    } catch (err) {}
   };
 
   useEffect(() => { if (activeTab === 'view') fetchExams(); }, [activeTab]);

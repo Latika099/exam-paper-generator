@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { BASE_URL } from "../config";
 // Importing multiple images for carousel
 import imgA from "../assets/img5.jpg";
 import imgB from "../assets/img6.jpg";
@@ -30,7 +31,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -47,8 +48,7 @@ export default function Login() {
         alert(data.message || "Login failed");
       }
     } catch (error) {
-      console.error("Login Error:", error);
-      alert("Server error. Is the backend running?");
+      alert("Server error. Please try again later.");
     } finally {
       setLoading(false);
     }

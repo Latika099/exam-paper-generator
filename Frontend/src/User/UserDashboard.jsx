@@ -11,8 +11,8 @@ export default function UserDashboard() {
 
         // Safety check for ID
         const url = userId
-            ? `/api/user/exams?studentId=${userId}`
-            : `/api/user/exams`;
+            ? `http://localhost:5000/api/user/exams?studentId=${userId}`
+            : `http://localhost:5000/api/user/exams`;
 
         fetch(url)
             .then((res) => {

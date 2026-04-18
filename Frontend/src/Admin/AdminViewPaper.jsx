@@ -8,7 +8,7 @@ export default function AdminViewPaper() {
 
   useEffect(() => {
     // Fetch the specific exam details
-    fetch(`/api/admin/exam/${id}`)
+    fetch(`http://localhost:5000/api/admin/exam/${id}`)
       .then((res) => res.json())
       .then((data) => setExam(data))
       .catch((err) => alert("Failed to load exam"));

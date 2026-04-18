@@ -25,7 +25,7 @@ export default function TakeExam() {
 
   // Fetch Exam Data
   useEffect(() => {
-    fetch(`/api/user/exam/${id}`)
+    fetch(`http://localhost:5000/api/user/exam/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Exam not found");
         return res.json();
@@ -97,7 +97,7 @@ export default function TakeExam() {
     }
 
     try {
-      const res = await fetch("/api/user/submit-exam", {
+      const res = await fetch("http://localhost:5000/api/user/submit-exam", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

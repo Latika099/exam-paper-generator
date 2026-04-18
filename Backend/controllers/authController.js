@@ -5,7 +5,7 @@ import { generateOTP, otpExpiry } from "../utils/otp.js";
 import { sendMail } from "../utils/mailer.js";
 import Exam from "../models/Exam.js";
 import Submission from "../models/submission.js";
-
+// TODO: improve login error handling
 // --- REGISTER ---
 export const registerStart = async (req, res) => {
   try {

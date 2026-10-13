@@ -1,33 +1,49 @@
 import dotenv from "dotenv";
-dotenv.config(); // <--- LOAD THIS FIRST
+dotenv.config();
 
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  connectionTimeout: 10000, // 10 seconds timeout for establishing connection
-  greetingTimeout: 10000,   // 10 seconds timeout for SMTP greeting
-  socketTimeout: 15000,     // 15 seconds timeout for socket operations
-});
+export const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY environment variable is not configured");
+  }
+  return new Resend(apiKey);
+};
 
 export const sendMail = async (to, subject, html) => {
+  const resend = getResendClient();
+  const fromAddress = process.env.RESEND_FROM || "onboarding@resend.dev";
+
+  let timeoutId;
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error("Resend HTTPS API request timed out after 10s"));
+    }, 10000);
+  });
+
   try {
-    const info = await transporter.sendMail({
-      from: `"Exam Admin" <${process.env.SMTP_USER}>`, // Add a nice sender name
-      to,
-      subject,
-      html,
-    });
-    console.log("Message sent: %s", info.messageId);
-    return info;
+    const response = await Promise.race([
+      resend.emails.send({
+        from: fromAddress,
+        to: Array.isArray(to) ? to : [to],
+        subject,
+        html,
+      }),
+      timeoutPromise,
+    ]);
+
+    if (response.error) {
+      console.error("Resend API error:", response.error);
+      throw new Error(response.error.message || "Failed to send email via Resend");
+    }
+
+    console.log("Email sent successfully via Resend. Message ID:", response.data?.id);
+    return response.data;
   } catch (error) {
-    console.error("Error sending email:", error);
-    throw error; // Re-throw so the controller knows it failed
+    console.error("Error sending email via Resend:", error.message);
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 };

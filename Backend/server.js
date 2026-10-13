@@ -14,8 +14,19 @@ const app = express();
 console.log("SERVER FILE LOADED");
 
 // Middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://exam-paper-generator-five.vercel.app",
+  "https://exam-paper-generator-3tb9pqes3-latika099s-projects.vercel.app",
+  /^https:\/\/exam-paper-generator.*\.vercel\.app$/
+];
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(cors({
-  origin: ["http://localhost:5173", "https://exam-paper-generator-five.vercel.app"],
+  origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));

@@ -59,6 +59,9 @@ export const registerStart = async (req, res) => {
       await sendMail(normalizedEmail, "Verify Your Account", `<p>Your verification OTP is: <b>${otp}</b></p>`);
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
+      return res.status(500).json({
+        message: "Failed to send verification email. Please try again later."
+      });
     }
 
     res.json({ message: "OTP sent successfully" });

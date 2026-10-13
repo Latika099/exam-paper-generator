@@ -34,26 +34,40 @@ export default function Register() {
     if (!password || password.length < 6) { setError("Password must be at least 6 characters"); return; }
 
     setLoading(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
     try {
       const res = await fetch(`${BASE_URL}/api/auth/register-start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username.trim(), email: email.trim(), password }),
+        signal: controller.signal,
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        data = null;
+      }
 
-      if (res.ok) {
+      if (res.ok && data) {
         setMsg(data.message || "OTP sent successfully");
         setTimeout(() => {
           navigate("/verify-otp", { state: { email: email.trim() } });
         }, 1000);
       } else {
-        setError(data.message || "Registration failed");
+        setError(data?.message || "Registration failed. Please try again.");
       }
     } catch (err) {
-      setError("Network error. Please try again later.");
+      if (err.name === "AbortError") {
+        setError("Request timed out. Please check your connection and try again.");
+      } else {
+        setError("Network error. Please try again later.");
+      }
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
